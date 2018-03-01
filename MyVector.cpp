@@ -135,10 +135,7 @@ const bool MyVector<T>::empty() const {
 
 template<typename T>
 int MyVector<T>::size() {
-    if (length() == 0) {
-        return 0;
-    }
-    return length() - 1;
+	return m_length;
 }
 
 template<typename T>
@@ -157,7 +154,6 @@ double MyVector<T>::max_size() {
         logsize /= 2;
         ++count;
     }
-    std::cout << "count is: " << count << "\n";
     return pow(2,64-count)-1; // assumes 64-bit machine 
 };
 
@@ -463,7 +459,7 @@ bool MyVector<T>::operator>=( const MyVector& rhs) {
 // START Misc personal functions
 template<typename T>
 void MyVector<T>::printVec() {
-    std::cout << "The contents of the vector are listed below:\n";
+    // std::cout << "The contents of the vector are listed below:\n";
     for (int ii = 0; ii < length(); ++ii) {
         std::cout << m_data[ii] << " ";
     }
