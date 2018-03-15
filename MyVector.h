@@ -213,7 +213,7 @@ private:
 
 };
 
-// template<typename T>
-// std::ostream& operator<< (std::ostream& os, const MyVector<T>& vec);
+template<typename T>
+std::ostream& operator<< (std::ostream& os, const MyVector<T>& vec);
 
 #endif

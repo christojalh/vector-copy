@@ -3,12 +3,11 @@
 //	-what are all the steps in defining a template class again?
 //	-is there a better way to use parent variables besides doing
 //		"parent->variablename" all the time?
-//	-why does the code continue running lines after I throw an error
 //	-how do you "disable" operators? I've currently set the operators to be void
 
 /* Christopher Lee	   
  * February 26th, 2018
- * Last update: March 11th, 2018
+ * Last updated: March 12th, 2018
  * 
  * This program is a copy class of std::vector with reduced constructor functionality
  * To create a vector using this program, pass in an array of data and the length of the array
@@ -32,15 +31,15 @@
 #include "MyVector.h"
 
 
-// template<typename T>
-// std::ostream& operator<< (std::ostream& os, const MyVector<T>& vec) {
-//     for (int ii = 0; ii < vec.length(); ++ii) {
-//         os << vec[ii] << " ";
-//     }
-//     os << "\n";
+template<typename T>
+std::ostream& operator<< (std::ostream& os, const MyVector<T>& vec) {
+    for (int ii = 0; ii < vec.length(); ++ii) {
+        os << vec[ii] << " ";
+    }
+    os << "\n";
 
-//     return os;
-// }
+    return os;
+}
 
 // START Member functions
 // Constructor
@@ -56,7 +55,7 @@ MyVector<T>::MyVector(T* input,int length) {
     m_instChecker = new T*[1];
     m_instChecker[0] = m_data + m_length;
     m_instCapacity = 1;
-    m_currentInst = 0; // anytime you increment, check capacity
+    m_currentInst = 0;
     m_firstValidInst = 0;
     m_createNewInst = false;
 
@@ -297,7 +296,7 @@ void MyVector<T>::insert( int pos, int count, const T& value ) {
 	if (m_instChecker[m_currentInst] > invalidPos) {
 		m_instChecker[m_currentInst] = invalidPos;		
 	}
-};
+}; 
 
 
 // deletes element at pos
@@ -607,7 +606,7 @@ template<typename T>
 void MyVector<T>::incInstCapacity() {
 	int newCap = m_instCapacity * 2;
 	T** temp = new T*[newCap];
-	memcpy(temp, m_instChecker, (m_currentInst + 1) * sizeof(T));
+	memcpy(temp, m_instChecker, m_currentInst * sizeof(T*));
 	delete m_instChecker;
 	m_instChecker = temp;
 	m_instCapacity = newCap;
@@ -672,10 +671,10 @@ MyVector<T>::Iterator::Iterator(T* index, MyVector<T>* vec) {
 	if (parent->m_createNewInst == true) {
 		// first we have to check if instChecker can hold 
 		// another instance
+		parent->m_currentInst += 1;
 		if (parent->m_currentInst == parent->m_instCapacity) {
 			parent->incInstCapacity();
-		}		
-		parent->m_currentInst += 1;
+		}
 		parent->m_createNewInst = false;
 		m_inst = parent->m_currentInst;
 		parent->m_instChecker[parent->m_currentInst] = (parent->m_data + parent->m_length);
